@@ -1,6 +1,6 @@
 site_name: NeoCore Docs
 site_description: NeoCore ledger kernel documentation
-repo_url: https://github.com/markinkus/NeoCore
+repo_url: https://github.com/markinkus/neocore-ledger
 nav:
   - Home: docs/index.md
   - Double-entry in 3 minutes: docs/double-entry-in-3-minutes.md

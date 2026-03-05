@@ -22,10 +22,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/markinkus/NeoCore"
-Repository = "https://github.com/markinkus/NeoCore"
-Issues = "https://github.com/markinkus/NeoCore/issues"
-Changelog = "https://github.com/markinkus/NeoCore/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/markinkus/neocore-ledger"
+Repository = "https://github.com/markinkus/neocore-ledger"
+Issues = "https://github.com/markinkus/neocore-ledger/issues"
+Changelog = "https://github.com/markinkus/neocore-ledger/blob/main/CHANGELOG.md"
 
 [project.scripts]
 neocore-payment-rail = "neocore.scenarios.payment_rail:main"

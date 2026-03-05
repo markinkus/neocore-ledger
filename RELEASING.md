@@ -4,7 +4,7 @@
 If you already pushed `main`, run:
 ```bash
 export GITHUB_TOKEN="<token-with-repo-scope>"
-python3.11 scripts/github_bootstrap.py --repo markinkus/NeoCore --tag v0.1.1
+python3.11 scripts/github_bootstrap.py --repo markinkus/neocore-ledger --tag v0.1.1
 ```
 
 This creates:
