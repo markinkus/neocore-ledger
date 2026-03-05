@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import subprocess
+import sys
 from decimal import Decimal
 from pathlib import Path
 
@@ -91,3 +93,17 @@ def test_main_prints_demo_report(capsys: pytest.CaptureFixture[str]) -> None:
     captured = capsys.readouterr()
     assert exit_code == 0
     assert "NeoCore Payment Rail Demo" in captured.out
+
+
+def test_examples_script_runs_successfully() -> None:
+    repo_root = Path(__file__).resolve().parents[2]
+    script = repo_root / "examples" / "payment_rail.py"
+    result = subprocess.run(
+        [sys.executable, str(script)],
+        capture_output=True,
+        text=True,
+        cwd=repo_root,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert "NeoCore Payment Rail Demo" in result.stdout
