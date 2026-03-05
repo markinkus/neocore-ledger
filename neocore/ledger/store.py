@@ -175,6 +175,36 @@ class SQLiteStore(LedgerStore):
                     ON entries(account_id, created_at, id);
                 CREATE INDEX IF NOT EXISTS idx_entries_transaction
                     ON entries(transaction_id, id);
+                CREATE TRIGGER IF NOT EXISTS trg_entries_no_update
+                BEFORE UPDATE ON entries
+                BEGIN
+                    SELECT RAISE(ABORT, 'entries are append-only');
+                END;
+                CREATE TRIGGER IF NOT EXISTS trg_entries_no_delete
+                BEFORE DELETE ON entries
+                BEGIN
+                    SELECT RAISE(ABORT, 'entries are append-only');
+                END;
+                CREATE TRIGGER IF NOT EXISTS trg_transactions_no_update
+                BEFORE UPDATE ON transactions
+                BEGIN
+                    SELECT RAISE(ABORT, 'transactions are append-only');
+                END;
+                CREATE TRIGGER IF NOT EXISTS trg_transactions_no_delete
+                BEFORE DELETE ON transactions
+                BEGIN
+                    SELECT RAISE(ABORT, 'transactions are append-only');
+                END;
+                CREATE TRIGGER IF NOT EXISTS trg_idempotency_keys_no_update
+                BEFORE UPDATE ON idempotency_keys
+                BEGIN
+                    SELECT RAISE(ABORT, 'idempotency keys are append-only');
+                END;
+                CREATE TRIGGER IF NOT EXISTS trg_idempotency_keys_no_delete
+                BEFORE DELETE ON idempotency_keys
+                BEGIN
+                    SELECT RAISE(ABORT, 'idempotency keys are append-only');
+                END;
                 """
             )
             self._conn.commit()

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sqlite3
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
@@ -188,3 +189,70 @@ def test_store_list_entries_with_time_window(store: LedgerStore) -> None:
 
     entries = store.list_entries("cash", until=t1)
     assert [entry.transaction_id for entry in entries] == ["tx-1"]
+
+
+def test_sqlite_idempotency_persists_across_restart(tmp_path: Path) -> None:
+    db_path = tmp_path / "ledger.sqlite"
+    store = SQLiteStore(db_path)
+    store.create_account(_account("cash"))
+    store.create_account(_account("bank", kind=AccountType.LIABILITY))
+
+    now = datetime.now(tz=UTC)
+    tx = _transaction(
+        tx_id="tx-1",
+        key="key-1",
+        debit_account="cash",
+        credit_account="bank",
+        amount="10.00",
+        created_at=now,
+    )
+    store.append_transaction(tx)
+
+    reopened = SQLiteStore(db_path)
+    loaded = reopened.get_transaction_by_idempotency_key("key-1")
+    assert loaded is not None
+    assert loaded.id == "tx-1"
+    assert loaded.idempotency_key == "key-1"
+    assert len(reopened.list_entries("cash")) == 1
+
+
+def test_sqlite_enforces_append_only_for_entries_and_transactions(tmp_path: Path) -> None:
+    db_path = tmp_path / "ledger.sqlite"
+    store = SQLiteStore(db_path)
+    store.create_account(_account("cash"))
+    store.create_account(_account("bank", kind=AccountType.LIABILITY))
+
+    now = datetime.now(tz=UTC)
+    tx = _transaction(
+        tx_id="tx-1",
+        key="key-1",
+        debit_account="cash",
+        credit_account="bank",
+        amount="10.00",
+        created_at=now,
+    )
+    store.append_transaction(tx)
+
+    with pytest.raises(sqlite3.DatabaseError):
+        store._conn.execute(  # pyright: ignore[reportPrivateUsage]
+            "UPDATE entries SET amount = ? WHERE id = ?",
+            ("999.00", "tx-1-d"),
+        )
+
+    with pytest.raises(sqlite3.DatabaseError):
+        store._conn.execute(  # pyright: ignore[reportPrivateUsage]
+            "DELETE FROM entries WHERE id = ?",
+            ("tx-1-d",),
+        )
+
+    with pytest.raises(sqlite3.DatabaseError):
+        store._conn.execute(  # pyright: ignore[reportPrivateUsage]
+            "UPDATE transactions SET description = ? WHERE id = ?",
+            ("hacked", "tx-1"),
+        )
+
+    with pytest.raises(sqlite3.DatabaseError):
+        store._conn.execute(  # pyright: ignore[reportPrivateUsage]
+            "DELETE FROM transactions WHERE id = ?",
+            ("tx-1",),
+        )
