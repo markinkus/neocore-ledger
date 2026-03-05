@@ -17,7 +17,7 @@ Non e' un core banking completo: niente layer HTTP, niente auth/IAM, niente orch
 ## Install
 Runtime (solo stdlib):
 ```bash
-python3.11 -m pip install .
+python3.11 -m pip install neocore-ledger
 ```
 
 Dev setup:

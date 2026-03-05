@@ -312,7 +312,7 @@ def parse_args() -> argparse.Namespace:
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=None, help="GitHub repo slug (owner/repo).")
-    parser.add_argument("--tag", default="v0.1.0", help="Release tag to create if missing.")
+    parser.add_argument("--tag", default="v0.1.1", help="Release tag to create if missing.")
     parser.add_argument(
         "--target-commitish",
         default="main",

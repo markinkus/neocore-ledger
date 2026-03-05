@@ -3,8 +3,8 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "neocore"
-version = "0.1.0"
+name = "neocore-ledger"
+version = "0.1.1"
 description = "A strict, append-only, Decimal-only ledger kernel for financial systems."
 readme = "README.md"
 requires-python = ">=3.11"

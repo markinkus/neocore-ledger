@@ -4,13 +4,13 @@
 If you already pushed `main`, run:
 ```bash
 export GITHUB_TOKEN="<token-with-repo-scope>"
-python3.11 scripts/github_bootstrap.py --repo markinkus/NeoCore --tag v0.1.0
+python3.11 scripts/github_bootstrap.py --repo markinkus/NeoCore --tag v0.1.1
 ```
 
 This creates:
 - labels: `good first issue`, `help wanted`, `design`, `docs`
 - 12 starter issues from the seeded backlog
-- GitHub Release `v0.1.0` (from `CHANGELOG.md`)
+- GitHub Release `v0.1.1` (from `CHANGELOG.md`)
 
 ## 1) Prepare
 - Ensure CI is green on `main`.
@@ -34,5 +34,5 @@ python -m twine upload dist/*
 ```
 
 ## 4) Verify
-- `pip install neocore==X.Y.Z`
+- `pip install neocore-ledger==X.Y.Z`
 - `python -m neocore.scenarios.payment_rail`
