@@ -1,5 +1,17 @@
 # Releasing NeoCore
 
+## One-shot bootstrap (labels + issue seeds + release)
+If you already pushed `main`, run:
+```bash
+export GITHUB_TOKEN="<token-with-repo-scope>"
+python3.11 scripts/github_bootstrap.py --repo markinkus/NeoCore --tag v0.1.0
+```
+
+This creates:
+- labels: `good first issue`, `help wanted`, `design`, `docs`
+- 12 starter issues from the seeded backlog
+- GitHub Release `v0.1.0` (from `CHANGELOG.md`)
+
 ## 1) Prepare
 - Ensure CI is green on `main`.
 - Update `CHANGELOG.md`.
